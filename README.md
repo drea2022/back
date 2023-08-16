@@ -1,7 +1,6 @@
 # SpringBoot 项目初始模板
 
-> 作者：[程序员鱼皮](https://github.com/liyupi)
-> 仅分享于 [编程导航知识星球](https://yupi.icu)
+> 作者：[程序员旭辉](https://github.com/drea2022)
 
 基于 Java SpringBoot 的项目初始模板，整合了常用框架和主流业务的示例代码。
 
