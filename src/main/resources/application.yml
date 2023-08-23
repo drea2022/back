@@ -86,7 +86,7 @@ wx:
 # todo 需替换配置
 cos:
   client:
-    accessKey: xxx
-    secretKey: xxx
-    region: xxx
-    bucket: xxx
+    accessKey: AKID18BLPLBudJoDd6b0LejZP5btzDKH5nQy
+    secretKey: WtIXcYXQCsQtOxQuTxUxRpAPdqx2GPNE
+    region: https://oj-1318547676.cos.ap-shanghai.myqcloud.com
+    bucket: oj-1318547676
