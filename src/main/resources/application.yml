@@ -90,3 +90,6 @@ cos:
     secretKey: WtIXcYXQCsQtOxQuTxUxRpAPdqx2GPNE
     region: https://oj-1318547676.cos.ap-shanghai.myqcloud.com
     bucket: oj-1318547676
+# 代码沙箱配置
+codesandbox:
+  type: example

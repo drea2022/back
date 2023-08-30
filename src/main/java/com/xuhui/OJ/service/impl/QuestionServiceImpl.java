@@ -105,8 +105,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         String content = questionQueryRequest.getContent();
         List<String> tags = questionQueryRequest.getTags();
         String answer = questionQueryRequest.getAnswer();
-        List<JudgeCase> judgeCase = questionQueryRequest.getJudgeCase();
-        JudgeConfig judgeConfig = questionQueryRequest.getJudgeConfig();
         Long userId = questionQueryRequest.getUserId();
         String sortField = questionQueryRequest.getSortField();
         String sortOrder = questionQueryRequest.getSortOrder();

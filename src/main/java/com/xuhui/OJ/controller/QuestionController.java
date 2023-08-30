@@ -57,7 +57,7 @@ public class QuestionController {
          * @return
          */
         @PostMapping("/add")
-        public BaseResponse<Long> addquestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
+        public BaseResponse<Long> addQuestion(@RequestBody QuestionAddRequest questionAddRequest, HttpServletRequest request) {
             if (questionAddRequest == null) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
@@ -94,7 +94,7 @@ public class QuestionController {
          * @return
          */
         @PostMapping("/delete")
-        public BaseResponse<Boolean> deletequestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
+        public BaseResponse<Boolean> deleteQuestion(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
             if (deleteRequest == null || deleteRequest.getId() <= 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
@@ -119,7 +119,7 @@ public class QuestionController {
          */
         @PostMapping("/update")
         @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
-        public BaseResponse<Boolean> updatequestion(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
+        public BaseResponse<Boolean> updateQuestion(@RequestBody QuestionUpdateRequest questionUpdateRequest) {
             if (questionUpdateRequest == null || questionUpdateRequest.getId() <= 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
@@ -147,14 +147,37 @@ public class QuestionController {
             return ResultUtils.success(result);
         }
 
+    /**
+     * 根据 id 获取
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/get")
+    public BaseResponse<Question> getQuestionById(long id, HttpServletRequest request) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Question question = questionService.getById(id);
+        if (question == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        //如果不是本人查询或者管理员则异常抛出
+        if (!question.getUserId().equals(loginUser.getId()) && !userService.isAdmin(loginUser)){
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+        }
+        return ResultUtils.success(question);
+    }
+
         /**
          * 根据 id 获取
          *
-         * @param id
+         * @param id（脱敏）
          * @return
          */
         @GetMapping("/get/vo")
-        public BaseResponse<QuestionVO> getquestionVOById(long id, HttpServletRequest request) {
+        public BaseResponse<QuestionVO> getQuestionVOById(long id, HttpServletRequest request) {
             if (id <= 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
@@ -173,7 +196,7 @@ public class QuestionController {
          * @return
          */
         @PostMapping("/list/page/vo")
-        public BaseResponse<Page<QuestionVO>> listquestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+        public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                            HttpServletRequest request) {
             long current = questionQueryRequest.getCurrent();
             long size = questionQueryRequest.getPageSize();
@@ -192,7 +215,7 @@ public class QuestionController {
          * @return
          */
         @PostMapping("/my/list/page/vo")
-        public BaseResponse<Page<QuestionVO>> listMyquestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+        public BaseResponse<Page<QuestionVO>> listMyQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
                                                              HttpServletRequest request) {
             if (questionQueryRequest == null) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -207,7 +230,26 @@ public class QuestionController {
                     questionService.getQueryWrapper(questionQueryRequest));
             return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
         }
-        /**
+
+    /**
+     * 分页获取题目列表（仅管理员）
+     *
+     * @param questionQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/list/page")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Page<Question>> listQuestionByPage(@RequestBody QuestionQueryRequest questionQueryRequest,
+                                                           HttpServletRequest request) {
+        long current = questionQueryRequest.getCurrent();
+        long size = questionQueryRequest.getPageSize();
+        Page<Question> questionPage = questionService.page(new Page<>(current, size),
+                questionService.getQueryWrapper(questionQueryRequest));
+        return ResultUtils.success(questionPage);
+    }
+
+    /**
          * 编辑（用户）
          *
          * @param questionEditRequest
@@ -215,7 +257,7 @@ public class QuestionController {
          * @return
          */
         @PostMapping("/edit")
-        public BaseResponse<Boolean> editquestion(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
+        public BaseResponse<Boolean> editQuestion(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
             if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }

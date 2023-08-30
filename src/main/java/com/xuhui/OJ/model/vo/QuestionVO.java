@@ -22,7 +22,6 @@ public class QuestionVO {
     /**
      * id
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
@@ -77,12 +76,6 @@ public class QuestionVO {
      */
     @TableField("updateTime")
     private LocalDateTime updateTime;
-
-    /**
-     * 是否删除
-     */
-    @TableField("isDelete")
-    private Integer isDelete;
     /**
      * 创建题目人信息
      */
@@ -114,7 +107,7 @@ public class QuestionVO {
     /**
      * 对象转包装类
      *
-     * @param post
+     * @param question
      * @return
      */
     public static QuestionVO objToVo(Question question) {
